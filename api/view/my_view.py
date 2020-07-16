@@ -1,12 +1,12 @@
 # file: api/view/my_view.py
 from sanic import response
 from sanic.views import HTTPMethodView
-from base import authorized, authorized_sync
+from base import authorized, authorized
 # for global views, register after
 views = []
 
 class SimpleView(HTTPMethodView):
-    decorators  = [authorized_sync()]
+    decorators  = [authorized()]
     # relative path, ex: /api/view/myview
     __url__ = '/myview'
     async def get(self, request):
