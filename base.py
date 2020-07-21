@@ -3,6 +3,7 @@ from sanic import response
 from sanic.log import logger
 import asyncio
 from api.dao.cookie import checkcookie
+from api.utils.common_util import GenRequestId
 import err
 def authorized(*args):
     def decorator(f):
@@ -39,3 +40,17 @@ def authorized(*args):
                     return response.json(err.BuildRepJson(err.CODE_NO_LOGIN), status=401)
             return decorated_function_sync
     return decorator
+
+async def filter_request(request):
+    request.ctx.request_id = GenRequestId()
+
+async def filter_response(request, response):
+    response.headers["Server"] = "CapsheafAPIServer"
+    response.headers["RequestId"] = request.ctx.request_id
+
+request_middlewares = [
+    filter_request
+]
+response_middlewares = [
+    filter_response
+]
