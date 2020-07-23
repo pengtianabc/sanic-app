@@ -46,7 +46,8 @@ async def filter_request(request):
 
 async def filter_response(request, response):
     response.headers["Server"] = "CapsheafAPIServer"
-    response.headers["RequestId"] = request.ctx.request_id
+    if hasattr(request.ctx, "request_id"):
+        response.headers["RequestId"] = request.ctx.request_id
 
 request_middlewares = [
     filter_request
